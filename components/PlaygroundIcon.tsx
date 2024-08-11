@@ -8,13 +8,19 @@ import {
   View,
 } from "react-native";
 import { actionCode } from "../constants/ACTIONS_CODE";
+import store from "../stores";
 import { selectActions } from "../stores/Actions/ActionsSlice";
-import { selectController } from "../stores/Controller/ControllerSlice";
+import {
+  pauseState,
+  resetDoneState,
+  selectController,
+} from "../stores/Controller/ControllerSlice";
 import { useAppDispatch, useAppSelector } from "../stores/Hooks";
 import {
   selectSprits,
   updateSpritPosition,
 } from "../stores/Sprits/SpritsSlice";
+import { iBoxSizing, tNullable } from "../types/commonTypes";
 
 interface PlaygroundIconComponentProps {
   name: string;
@@ -25,7 +31,7 @@ const PlaygroundIconComponent: React.FC<PlaygroundIconComponentProps> = ({
   name,
   image,
 }) => {
-  const { play } = useAppSelector(selectController);
+  const { play, reset } = useAppSelector(selectController);
   const { sprits } = useAppSelector(selectSprits);
   const { actions } = useAppSelector(selectActions);
   const dispatch = useAppDispatch();
@@ -33,6 +39,7 @@ const PlaygroundIconComponent: React.FC<PlaygroundIconComponentProps> = ({
   const [dragging, setDragging] = useState(false);
   const [showHello, setShowHello] = useState(false);
 
+  const playgroundBounds = useRef<tNullable<iBoxSizing>>(null);
   const position = useRef(new Animated.ValueXY()).current;
   const spinAnimation = useRef(new Animated.Value(0)).current;
   const duration = 1000;
@@ -72,11 +79,17 @@ const PlaygroundIconComponent: React.FC<PlaygroundIconComponentProps> = ({
       if (actionCode[action]) {
         actionCode[action]({ position, spinAnimation, duration, setShowHello });
         await new Promise((resolve) => setTimeout(resolve, duration + 100));
+
+        const storePlay = store.getState().controller.play;
+
+        if (!storePlay) {
+          break;
+        }
       }
     }
   };
 
-  const preprocessActions = async () => {
+  const preprocessActions = async (playParam: boolean) => {
     let repeat = false;
     const { selectedAction } = sprits[name];
 
@@ -91,24 +104,33 @@ const PlaygroundIconComponent: React.FC<PlaygroundIconComponentProps> = ({
       repeat = true;
     }
 
-    if (play) {
+    if (playParam) {
       await playAction(actionsCopy);
     }
-    console.log(play);
 
-    if (repeat && play) {
-      preprocessActions();
+    const storePlay = store.getState().controller.play;
+
+    if (repeat && storePlay) {
+      preprocessActions(storePlay);
+    } else {
+      dispatch(pauseState());
     }
   };
 
   useEffect(() => {
-    if (!play) {
-      position.setValue({ x: 0, y: 0 });
-      setShowHello(false);
-    } else {
-      preprocessActions();
+    if (play) {
+      preprocessActions(play);
     }
   }, [play]);
+
+  useEffect(() => {
+    if (reset) {
+      position.setValue({ x: 0, y: 0 });
+      setShowHello(false);
+      dispatch(resetDoneState());
+      dispatch(pauseState());
+    }
+  }, [reset]);
 
   return (
     <Animated.View

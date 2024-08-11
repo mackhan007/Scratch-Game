@@ -7,7 +7,7 @@ interface AddIconsAndActionsComponentProps {}
 
 const AddIconsAndActionsComponent: React.FC<
   AddIconsAndActionsComponentProps
-> = ({}) => {
+> = () => {
   const { sprits } = useAppSelector(selectSprits);
 
   return (
@@ -16,7 +16,7 @@ const AddIconsAndActionsComponent: React.FC<
         <ScrollView horizontal={true}>
           {Object.entries(sprits).map(([name, sprit]) => (
             <IconCardComponent
-              key={name}
+              key={`icon-${name}`}
               name={name}
               image={sprit.image}
               selectedAction={sprit.selectedAction}

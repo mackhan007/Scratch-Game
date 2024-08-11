@@ -20,7 +20,7 @@ const TopBarComponent: React.FC<TopBarComponentProps> = ({
       <GestureHandlerRootView style={{}}>
         <TouchableOpacity onPress={onDonePress}>
           <Text style={styles.signInText}>
-            {showDoneButton ? "Done" : "Sign In"}{" "}
+            {showDoneButton ? "Done" : "Sign In"}
           </Text>
         </TouchableOpacity>
       </GestureHandlerRootView>

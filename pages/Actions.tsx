@@ -2,8 +2,6 @@ import EvilIcons from "@expo/vector-icons/EvilIcons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react";
 import {
-  FlatList,
-  LayoutAnimation,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -12,17 +10,17 @@ import {
   View,
 } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import uuid from "react-native-uuid";
 import DraggableItemComponent from "../components/DraggableItem";
 import TopBarComponent from "../components/TopBar";
 import { actionCode } from "../constants/ACTIONS_CODE";
 import { selectActions, updatedAction } from "../stores/Actions/ActionsSlice";
 import { useAppDispatch, useAppSelector } from "../stores/Hooks";
 import { selectSprits, updateSpritAction } from "../stores/Sprits/SpritsSlice";
+import { getBoxSizing } from "../utils/getBoxSizing.utils";
 import { showAlert } from "../utils/showAlert.utils";
 
-interface ActionsPageProps {}
-
-const ActionsPage: React.FC<ActionsPageProps> = ({}) => {
+const ActionsPage: React.FC = () => {
   const [dropZoneBounds, setDropZoneBounds] = useState({
     x: 0,
     y: 0,
@@ -38,10 +36,8 @@ const ActionsPage: React.FC<ActionsPageProps> = ({}) => {
 
   useEffect(() => {
     setTimeout(() => {
-      dropZoneRef.current?.measure((_, _1, width, height, pageX, pageY) => {
-        setDropZoneBounds({ x: pageX, y: pageY, width, height });
-      });
-    }, 1000);
+      getBoxSizing({ boxRef: dropZoneRef, setState: setDropZoneBounds });
+    }, 0);
   }, []);
 
   const handleDrop = (item: string) => {
@@ -65,7 +61,7 @@ const ActionsPage: React.FC<ActionsPageProps> = ({}) => {
       })
     );
 
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   };
 
   const handleDelete = (index: number) => {
@@ -98,8 +94,18 @@ const ActionsPage: React.FC<ActionsPageProps> = ({}) => {
             <View style={styles.codeActionBox}>
               <Text style={styles.codeBox}>Code</Text>
               <View style={styles.lineStyle} />
-              <FlatList
+              {Object.keys(actionCode).map((item) => (
+                <DraggableItemComponent
+                  key={`draggable-item-${item}`}
+                  item={item}
+                  onDrop={handleDrop}
+                  dropZoneBounds={dropZoneBounds}
+                />
+              ))}
+
+              {/* <FlatList
                 data={Object.keys(actionCode)}
+                removeClippedSubviews={false}
                 renderItem={(item) => {
                   return (
                     <DraggableItemComponent
@@ -110,13 +116,13 @@ const ActionsPage: React.FC<ActionsPageProps> = ({}) => {
                     />
                   );
                 }}
-              />
+              /> */}
             </View>
             <View ref={dropZoneRef} style={styles.codeActionBox}>
               <Text style={styles.actionBox}>Actions</Text>
               <View style={styles.lineStyle} />
               {actions[selectedAction].map((item, index) => (
-                <View key={`action-${item}`} style={styles.item}>
+                <View key={`action-${uuid.v4()}-${item}`} style={styles.item}>
                   <Text style={{ color: "white" }}>{item}</Text>
                   <TouchableOpacity
                     style={styles.deleteButton}

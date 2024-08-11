@@ -3,22 +3,30 @@ import { RootState } from "..";
 
 const initialState = {
   play: false,
+  reset: false,
 };
 
 const controllerSlice = createSlice({
   name: "controller",
   initialState,
   reducers: {
-    play: (state) => {
+    playState: (state) => {
       state.play = true;
     },
-    reset: (state) => {
+    pauseState: (state) => {
       state.play = false;
+    },
+    resetState: (state) => {
+      state.reset = true;
+    },
+    resetDoneState: (state) => {
+      state.reset = false;
     },
   },
 });
 
-export const { play, reset } = controllerSlice.actions;
+export const { playState, pauseState, resetDoneState, resetState } =
+  controllerSlice.actions;
 
 export const selectController = (state: RootState) => state.controller;
 

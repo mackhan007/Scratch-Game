@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useAppDispatch } from "../stores/Hooks";
 import { updateSpritAction } from "../stores/Sprits/SpritsSlice";
+import { tNullable } from "./../types/commonTypes";
 
 interface IconCardComponentProps {
   name: string;

@@ -1,11 +1,18 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { play, reset } from "../stores/Controller/ControllerSlice";
-import { useAppDispatch } from "../stores/Hooks";
+import {
+  pauseState,
+  playState,
+  resetState,
+  selectController,
+} from "../stores/Controller/ControllerSlice";
+import { useAppDispatch, useAppSelector } from "../stores/Hooks";
 
 interface ControllerComponentProps {}
 
-const ControllerComponent: React.FC<ControllerComponentProps> = ({}) => {
+const ControllerComponent: React.FC<ControllerComponentProps> = () => {
+  const { play } = useAppSelector(selectController);
+
   const dispatch = useAppDispatch();
 
   return (
@@ -14,15 +21,23 @@ const ControllerComponent: React.FC<ControllerComponentProps> = ({}) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            dispatch(play());
+            if (play) {
+              dispatch(pauseState());
+            } else {
+              dispatch(playState());
+            }
           }}
         >
-          <MaterialIcons name="play-arrow" size={24} color="white" />
+          {play ? (
+            <MaterialIcons name="pause" size={24} color="white" />
+          ) : (
+            <MaterialIcons name="play-arrow" size={24} color="white" />
+          )}
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            dispatch(reset());
+            dispatch(resetState());
           }}
         >
           <MaterialIcons name="replay" size={24} color="white" />

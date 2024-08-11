@@ -6,16 +6,12 @@ import {
   PanGestureHandlerEventPayload,
   State,
 } from "react-native-gesture-handler";
+import { iBoxSizing } from "../types/commonTypes";
 
 interface DraggableItemComponentProps {
   item: string;
   onDrop: (item: string) => void;
-  dropZoneBounds: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
+  dropZoneBounds: iBoxSizing;
 }
 
 const DraggableItemComponent: React.FC<DraggableItemComponentProps> = ({
@@ -72,7 +68,6 @@ const DraggableItemComponent: React.FC<DraggableItemComponentProps> = ({
           styles.item,
           {
             transform: [{ translateX: translateX }, { translateY: translateY }],
-            zIndex: isDragging ? 10 : 0,
           },
         ]}
       >

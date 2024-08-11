@@ -5,9 +5,7 @@ import DataShowCaseComponent from "../components/DataShowCase";
 import PlaygroundComponent from "../components/Playground";
 import TopBarComponent from "../components/TopBar";
 
-interface HomePageProps {}
-
-const HomePage: React.FC<HomePageProps> = ({}) => {
+const HomePage: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View>

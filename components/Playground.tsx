@@ -6,14 +6,18 @@ import PlaygroundIconComponent from "./PlaygroundIcon";
 
 interface PlaygroundComponentProps {}
 
-const PlaygroundComponent: React.FC<PlaygroundComponentProps> = ({}) => {
+const PlaygroundComponent: React.FC<PlaygroundComponentProps> = () => {
   const { sprits } = useAppSelector(selectSprits);
 
   return (
     <View style={styles.playgroundContainer}>
       <View style={styles.playgroundBoxContainer}>
         {Object.entries(sprits).map(([name, sprit]) => (
-          <PlaygroundIconComponent key={name} name={name} image={sprit.image} />
+          <PlaygroundIconComponent
+            key={`playground-icon-${name}`}
+            name={name}
+            image={sprit.image}
+          />
         ))}
       </View>
     </View>

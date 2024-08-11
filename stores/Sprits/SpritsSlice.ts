@@ -3,6 +3,7 @@ import { RootState } from "..";
 import { iSpritsStore, tPosition } from "./Types";
 
 import CatImage from "../../assets/scratch-cat.png";
+import { tNullable } from "./../../types/commonTypes";
 
 const initialState: iSpritsStore = {
   sprits: {
