@@ -1,8 +1,5 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import {
-  GestureHandlerRootView,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import ScratchTitle from "../assets/scratch.png";
 
 interface TopBarComponentProps {
@@ -17,13 +14,12 @@ const TopBarComponent: React.FC<TopBarComponentProps> = ({
   return (
     <View style={styles.topBar}>
       <Image source={ScratchTitle} style={styles.titleImg} />
-      <GestureHandlerRootView style={{}}>
-        <TouchableOpacity onPress={onDonePress}>
-          <Text style={styles.signInText}>
-            {showDoneButton ? "Done" : "Sign In"}
-          </Text>
-        </TouchableOpacity>
-      </GestureHandlerRootView>
+
+      <TouchableOpacity onPress={onDonePress}>
+        <Text style={styles.signInText}>
+          {showDoneButton ? "Done" : "Sign In"}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };

@@ -40,7 +40,12 @@ const PlaygroundIconComponent: React.FC<PlaygroundIconComponentProps> = ({
   const [showHello, setShowHello] = useState(false);
 
   const playgroundBounds = useRef<tNullable<iBoxSizing>>(null);
-  const position = useRef(new Animated.ValueXY()).current;
+  const position = useRef(
+    new Animated.ValueXY({
+      x: sprits[name].position.x,
+      y: sprits[name].position.y,
+    })
+  ).current;
   const spinAnimation = useRef(new Animated.Value(0)).current;
   const duration = 1000;
   const spin = spinAnimation.interpolate({
@@ -120,7 +125,7 @@ const PlaygroundIconComponent: React.FC<PlaygroundIconComponentProps> = ({
     if (repeat && storePlay) {
       preprocessActions(storePlay);
     } else {
-      dispatch(pauseState());
+      // dispatch(pauseState());
     }
   };
 
@@ -144,6 +149,7 @@ const PlaygroundIconComponent: React.FC<PlaygroundIconComponentProps> = ({
       style={{
         transform: position.getTranslateTransform(),
         opacity: dragging ? 0.8 : 1,
+        position: "absolute",
       }}
       {...panResponder.panHandlers}
     >

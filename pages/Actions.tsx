@@ -11,7 +11,9 @@ import {
 } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import uuid from "react-native-uuid";
+import AddActionsListComponent from "../components/AddActionsList";
 import DraggableItemComponent from "../components/DraggableItem";
+import ModelViewComponent from "../components/ModelView";
 import TopBarComponent from "../components/TopBar";
 import { actionCode } from "../constants/ACTIONS_CODE";
 import { selectActions, updatedAction } from "../stores/Actions/ActionsSlice";
@@ -30,9 +32,11 @@ const ActionsPage: React.FC = () => {
   const dropZoneRef = useRef<View>(null);
   const { actions, selectedAction } = useAppSelector(selectActions);
   const { selectedSprit } = useAppSelector(selectSprits);
-  const navigation = useNavigation();
 
+  const navigation = useNavigation();
   const dispatch = useAppDispatch();
+
+  const [showModel, setShowModel] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -76,19 +80,19 @@ const ActionsPage: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.safeAreaStyles}>
-      <TopBarComponent
-        showDoneButton
-        onDonePress={() => {
-          dispatch(
-            updateSpritAction({
-              spritName: selectedSprit,
-              selectedAction: selectedAction,
-            })
-          );
-          navigation.goBack();
-        }}
-      />
       <GestureHandlerRootView>
+        <TopBarComponent
+          showDoneButton
+          onDonePress={() => {
+            dispatch(
+              updateSpritAction({
+                spritName: selectedSprit,
+                selectedAction: selectedAction,
+              })
+            );
+            navigation.goBack();
+          }}
+        />
         <View style={styles.container}>
           <View style={styles.row}>
             <View style={styles.codeActionBox}>
@@ -119,7 +123,9 @@ const ActionsPage: React.FC = () => {
               /> */}
             </View>
             <View ref={dropZoneRef} style={styles.codeActionBox}>
-              <Text style={styles.actionBox}>Actions</Text>
+              <TouchableOpacity onPress={() => setShowModel(true)}>
+                <Text style={styles.actionBox}>{selectedAction}</Text>
+              </TouchableOpacity>
               <View style={styles.lineStyle} />
               {actions[selectedAction].map((item, index) => (
                 <View key={`action-${uuid.v4()}-${item}`} style={styles.item}>
@@ -133,6 +139,19 @@ const ActionsPage: React.FC = () => {
                 </View>
               ))}
             </View>
+            <ModelViewComponent
+              showModel={showModel}
+              child={
+                <AddActionsListComponent
+                  clickClose={() => {
+                    setShowModel(false);
+                  }}
+                />
+              }
+              onModelClose={() => {
+                setShowModel(false);
+              }}
+            />
           </View>
         </View>
       </GestureHandlerRootView>

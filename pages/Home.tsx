@@ -1,4 +1,5 @@
 import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AddIconsAndActionsComponent from "../components/AddIconsAndActions";
 import ControllerComponent from "../components/Controller";
 import DataShowCaseComponent from "../components/DataShowCase";
@@ -8,13 +9,15 @@ import TopBarComponent from "../components/TopBar";
 const HomePage: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <TopBarComponent />
-        <PlaygroundComponent />
-        <DataShowCaseComponent />
-        <ControllerComponent />
-        <AddIconsAndActionsComponent />
-      </View>
+      <GestureHandlerRootView>
+        <View>
+          <TopBarComponent />
+          <PlaygroundComponent />
+          <DataShowCaseComponent />
+          <ControllerComponent />
+          <AddIconsAndActionsComponent />
+        </View>
+      </GestureHandlerRootView>
     </SafeAreaView>
   );
 };

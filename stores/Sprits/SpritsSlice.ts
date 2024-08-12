@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
 import { iSpritsStore, tPosition } from "./Types";
 
+import { ImageSourcePropType } from "react-native";
 import CatImage from "../../assets/scratch-cat.png";
 import { tNullable } from "./../../types/commonTypes";
 
@@ -20,6 +21,27 @@ const SpritsSlice = createSlice({
   name: "sprits",
   initialState,
   reducers: {
+    addSpritAction: (
+      state,
+      action: PayloadAction<{
+        spritName: string;
+        spritImage: ImageSourcePropType;
+      }>
+    ) => {
+      state.sprits[action.payload.spritName] = {
+        selectedAction: null,
+        image: action.payload.spritImage,
+        position: { x: 0, y: 0 },
+      };
+
+      state.selectedSprit = action.payload.spritName;
+    },
+    deleteSpritAction: (state, action: PayloadAction<string>) => {
+      delete state.sprits[action.payload];
+    },
+    setSelectedSprit: (state, action: PayloadAction<string>) => {
+      state.selectedSprit = action.payload;
+    },
     updateSpritAction: (
       state,
       action: PayloadAction<{
@@ -43,7 +65,13 @@ const SpritsSlice = createSlice({
   },
 });
 
-export const { updateSpritAction, updateSpritPosition } = SpritsSlice.actions;
+export const {
+  updateSpritAction,
+  updateSpritPosition,
+  addSpritAction,
+  deleteSpritAction,
+  setSelectedSprit,
+} = SpritsSlice.actions;
 
 export const selectSprits = (state: RootState): iSpritsStore => state.sprits;
 

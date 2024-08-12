@@ -7,6 +7,7 @@ const initialState: iActionStore = {
     "Action 1": [],
   },
   selectedAction: "Action 1",
+  actionIndex: 2,
 };
 
 export const actionsSlice = createSlice({
@@ -23,10 +24,20 @@ export const actionsSlice = createSlice({
       const { actionName, actionList } = action.payload;
       state.actions[actionName] = actionList;
     },
+    addNewAction: (state) => {
+      const name = `Action ${state.actionIndex}`;
+      state.actions[name] = [];
+      state.actionIndex += 1;
+      state.selectedAction = name;
+    },
+    setSelectedAction: (state, action: PayloadAction<string>) => {
+      state.selectedAction = action.payload;
+    },
   },
 });
 
-export const { updatedAction } = actionsSlice.actions;
+export const { updatedAction, addNewAction, setSelectedAction } =
+  actionsSlice.actions;
 
 export const selectActions = (state: RootState): iActionStore => state.actions;
 

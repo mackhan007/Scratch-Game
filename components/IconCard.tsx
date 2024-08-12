@@ -9,7 +9,10 @@ import {
   View,
 } from "react-native";
 import { useAppDispatch } from "../stores/Hooks";
-import { updateSpritAction } from "../stores/Sprits/SpritsSlice";
+import {
+  setSelectedSprit,
+  updateSpritAction,
+} from "../stores/Sprits/SpritsSlice";
 import { tNullable } from "./../types/commonTypes";
 
 interface IconCardComponentProps {
@@ -28,6 +31,7 @@ const IconCardComponent: React.FC<IconCardComponentProps> = ({
 
   const pushToActionsPage = () => {
     if (selectedAction === null) {
+      dispatch(setSelectedSprit(name));
       navigation.navigate("actions");
       return;
     }
