@@ -19,6 +19,7 @@ const AddActionsListComponent: React.FC<AddActionsListComponentProps> = ({
 
   return (
     <View>
+      <Text style={{ padding: 10 }}>Actions</Text>
       {Object.keys(actions).map((item) => {
         return (
           <TouchableOpacity

@@ -33,6 +33,9 @@ const ShowAddSpritListComponent: React.FC<ShowAddSpritListComponentProps> = ({
 
   return (
     <View>
+      <Text style={{ padding: 10 }}>
+        {Object.keys(spritList).length > 0 ? "Add Sprit" : "No Sprits left"}
+      </Text>
       {Object.entries(spritList).map(([name, sprit]) => (
         <TouchableOpacity
           key={`item-${name}`}

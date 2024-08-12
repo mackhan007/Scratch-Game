@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Modal, StyleSheet, View } from "react-native";
 
 interface ModelViewComponentProps {
   showModel: boolean;
@@ -10,20 +10,11 @@ interface ModelViewComponentProps {
 const ModelViewComponent: React.FC<ModelViewComponentProps> = ({
   showModel,
   child,
-  onModelClose,
 }) => {
   return (
     <Modal animationType="slide" transparent={true} visible={showModel}>
       <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          {child}
-          <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={onModelClose}
-          >
-            <Text style={styles.textStyle}>Hide Modal</Text>
-          </Pressable>
-        </View>
+        <View style={styles.modalView}>{child}</View>
       </View>
     </Modal>
   );
