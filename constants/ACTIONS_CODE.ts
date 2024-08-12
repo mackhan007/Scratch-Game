@@ -1,10 +1,14 @@
 import { Animated, Easing } from "react-native";
+import { AppDispatch } from "../stores";
+import { updateSpritPosition } from "../stores/Sprits/SpritsSlice";
 
 interface iActionCodeParams {
+  spritName: string;
   position: Animated.ValueXY;
   duration: number;
   spinAnimation: Animated.Value;
   setShowHello: (value: boolean) => void;
+  dispatch: AppDispatch;
 }
 
 interface AnimatedValueXY {
@@ -25,7 +29,7 @@ type iActionCode = {
 };
 
 const actionCode: iActionCode = {
-  "Move X by 50": ({ position, duration }) => {
+  "Move X by 50": ({ position, duration, spritName, dispatch }) => {
     const adaptedPosition = position as unknown as AnimatedValueXY;
 
     const x = adaptedPosition.x._value + 50;
@@ -43,8 +47,17 @@ const actionCode: iActionCode = {
       duration,
       useNativeDriver: true,
     }).start();
+
+    setTimeout(() => {
+      dispatch(
+        updateSpritPosition({
+          spritName,
+          position: { x, y },
+        })
+      );
+    }, duration);
   },
-  "Move Y by 50": ({ position, duration }) => {
+  "Move Y by 50": ({ position, duration, spritName, dispatch }) => {
     const adaptedPosition = position as unknown as AnimatedValueXY;
 
     const x = adaptedPosition.x._value;
@@ -62,6 +75,15 @@ const actionCode: iActionCode = {
       duration,
       useNativeDriver: true,
     }).start();
+
+    setTimeout(() => {
+      dispatch(
+        updateSpritPosition({
+          spritName,
+          position: { x, y },
+        })
+      );
+    }, duration);
   },
   "Rotate by 360": ({ spinAnimation, duration }) => {
     const adaptedSpinAnimation = spinAnimation as unknown as AnimatedValue;
@@ -75,17 +97,29 @@ const actionCode: iActionCode = {
       useNativeDriver: true,
     }).start();
   },
-  "Go to (0, 0)": ({ position, duration }) => {
+  "Go to (0, 0)": ({ position, duration, spritName, dispatch }) => {
+    const x = 0;
+    const y = 0;
+
     Animated.timing(position, {
       toValue: {
-        x: 0,
-        y: 0,
+        x,
+        y,
       },
       duration,
       useNativeDriver: true,
     }).start();
+
+    setTimeout(() => {
+      dispatch(
+        updateSpritPosition({
+          spritName,
+          position: { x, y },
+        })
+      );
+    }, duration);
   },
-  "Go to (50, 50)": ({ position, duration }) => {
+  "Go to (50, 50)": ({ position, duration, spritName, dispatch }) => {
     Animated.timing(position, {
       toValue: {
         x: 50,
@@ -94,8 +128,17 @@ const actionCode: iActionCode = {
       duration,
       useNativeDriver: true,
     }).start();
+
+    setTimeout(() => {
+      dispatch(
+        updateSpritPosition({
+          spritName,
+          position: { x: 50, y: 50 },
+        })
+      );
+    }, duration);
   },
-  "Go to Random Position": ({ position, duration }) => {
+  "Go to Random Position": ({ position, duration, spritName, dispatch }) => {
     const x = Math.floor(Math.random() * 300);
     const y = Math.floor(Math.random() * 250);
 
@@ -107,13 +150,22 @@ const actionCode: iActionCode = {
       duration,
       useNativeDriver: true,
     }).start();
+
+    setTimeout(() => {
+      dispatch(
+        updateSpritPosition({
+          spritName,
+          position: { x, y },
+        })
+      );
+    }, duration);
   },
-  "Say Hello for 1 second": ({ setShowHello }) => {
+  "Say Hello for 1 second": ({ duration, setShowHello }) => {
     setShowHello(true);
 
     setTimeout(() => {
       setShowHello(false);
-    }, 1000);
+    }, duration);
   },
   // "Increase Size by 10": () => {},
   // "Decrease Size by 10": () => {},

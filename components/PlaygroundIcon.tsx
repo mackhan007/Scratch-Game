@@ -77,7 +77,14 @@ const PlaygroundIconComponent: React.FC<PlaygroundIconComponentProps> = ({
   const playAction = async (actionsCopy: string[]) => {
     for (const action of actionsCopy) {
       if (actionCode[action]) {
-        actionCode[action]({ position, spinAnimation, duration, setShowHello });
+        actionCode[action]({
+          spritName: name,
+          position,
+          spinAnimation,
+          duration,
+          setShowHello,
+          dispatch,
+        });
         await new Promise((resolve) => setTimeout(resolve, duration + 100));
 
         const storePlay = store.getState().controller.play;
